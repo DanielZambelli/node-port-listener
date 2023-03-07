@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: node-port-listener
+  labels:
+    app: node-port-listener
+spec:
+  type: ClusterIP
+  selector:
+    app: node-port-listener
+  ports:
+    - protocol: TCP
+      name: node-port-listener
+      port: 8089
+      targetPort: 80
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: node-port-listener
+  labels:
+    app: node-port-listener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-port-listener
+  template:
+    metadata:
+      labels:
+        app: node-port-listener
+    spec:
+      containers:
+        - name: node-port-listener
+          image: danielzambelli/node-port-listener:latest
